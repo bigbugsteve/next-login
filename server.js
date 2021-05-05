@@ -3,11 +3,17 @@
 
 const express = require('express')
 const next = require('next')
-    
+const dotenv = require('dotenv')
+const mongoose = require('mongoose')
+
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
     
+// connecet to DB
+mongoose.connect(process.env.DB_CONNECT, {useNewUrlParser: true, useUnifiedTopology: true}, () => 
+    console.log('connected to db'))
+
 app.prepare()
 .then(() => {
     const server = express()
