@@ -9,6 +9,11 @@ const mongoose = require('mongoose')
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
+
+// // Import routes
+const authRoute = require('../api/routes/auth')
+console.log("🚀 ~ file: server.js ~ line 15 ~ authRoute", authRoute)
+// const postRoute = require('./api/routes/posts')
     
 // connecet to DB
 mongoose.connect(process.env.DB_CONNECT, {useNewUrlParser: true, useUnifiedTopology: true}, () => 
@@ -17,7 +22,11 @@ mongoose.connect(process.env.DB_CONNECT, {useNewUrlParser: true, useUnifiedTopol
 app.prepare()
 .then(() => {
     const server = express()
-        
+    
+    // Route Middleware
+    server.use('/', authRoute)
+    // app.use('/api/posts', postRoute);
+
     server.get('*', (req, res) => {
         return handle(req, res)
     })
